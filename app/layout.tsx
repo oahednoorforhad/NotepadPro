@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Navbar from "../components/ui/navbar"
+import AuthProvider from "@/services/AuthProvider";
+import { ThemeProvider } from "next-themes";
+import DotPattern from "@/components/ui/dot-pattern";
+import { cn } from "@/lib/utils";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,11 +31,33 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+        className={`h-max text-primary bg-background ${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            <Navbar />
+            {children}
+          </AuthProvider>
+          <DotPattern
+            width={20}
+            height={20}
+            cx={1}
+            cy={1}
+            cr={1}
+            className={cn(
+              "[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)] ",
+            )}
+          />
+        </ThemeProvider>
       </body>
+
+
     </html>
   );
 }
