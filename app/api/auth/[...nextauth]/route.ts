@@ -14,13 +14,7 @@ const handler = NextAuth({
         password: {},
       },
       async authorize(credentials) {
-        const user = {
-          id: "1",
-          name: "Admin User",
-          email: "admin@example.com",
-        };
-        console.log("Authorized user:", user);
-        return user;
+        return true;
       },
     }),
   ],
