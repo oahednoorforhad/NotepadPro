@@ -10,8 +10,10 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Input } from '@/components/ui/input'
 export default function ToDoList() {
     const session = useSession();
+    const [user, setUser] = useState({});
     useEffect(() => {
         async function fetchUser() {
             if (session) {
@@ -20,18 +22,33 @@ export default function ToDoList() {
                 const data = await res.json();
                 console.log("Fetched Data:", data); // Log the response
                 setTasks(data.notes || []); // Fallback to empty array if notes is undefined or null
+                setUser(data);
             }
         }
         fetchUser();
     }, [session]);
 
+    const updateNotes = async (newNotes) => {
+        if (session) {
+            const email = session.data.user.email;
+
+            const res = await fetch(`http://localhost:3000/notepad/api`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, notes: newNotes })
+            });
+
+            if (res.ok) {
+                console.log("Notes updated successfully");
+            } else {
+                console.error("Failed to update notes");
+            }
+        }
+    };
     const [tasks, setTasks] = useState([
-        { title: "Bazar List", content: "gotta buy a lotta things" },
-        { title: "Workout Plan", content: "Do 30 minutes of cardio and strength training" },
-        { title: "Grocery List", content: "Eggs, milk, bread, and vegetables" },
-        { title: "Study Goals", content: "Finish reading Chapter 5 and solve practice problems" },
-        { title: "Meeting Agenda", content: "Discuss project updates and deadlines" }
-    ]);
+        { title: "", content: "" },]);
 
     const [newTask, setNewTask] = useState({ title: "", content: "" });
 
@@ -46,6 +63,7 @@ export default function ToDoList() {
         if (newTask.title.trim() !== "" && newTask.content.trim() !== "") {
             const updatedTasks = [...tasks, newTask];
             setTasks(updatedTasks);
+            updateNotes(updatedTasks);
             setNewTask({ title: "", content: "" });
         }
     }
@@ -53,6 +71,7 @@ export default function ToDoList() {
     function DeleteTask(index: number) {
         const updatedTasks = tasks.filter((_, i) => i !== index);
         setTasks(updatedTasks);
+        updateNotes(updatedTasks);
     }
 
     function moveTaskUp(index: number) {
@@ -60,6 +79,7 @@ export default function ToDoList() {
             const updatedTasks = [...tasks];
             [updatedTasks[index], updatedTasks[index - 1]] = [updatedTasks[index - 1], updatedTasks[index]];
             setTasks(updatedTasks);
+            updateNotes(updatedTasks);
         }
     }
 
@@ -68,23 +88,23 @@ export default function ToDoList() {
             const updatedTasks = [...tasks];
             [updatedTasks[index], updatedTasks[index + 1]] = [updatedTasks[index + 1], updatedTasks[index]];
             setTasks(updatedTasks);
+            updateNotes(updatedTasks);
         }
     }
 
     return (
-        <div className="p-10 justify-items-center">
-            <div className='p-10'>
+        <div className="m-10 p-10 justify-items-center">
+            <div className='p-6'>
                 <h3 className='text-8xl'>Notepad</h3>
             </div>
-            <div className='p-5'><h3>User: Oahed</h3></div>
+            <div className='p-5'><h3>User: {user.name}</h3></div>
             <div className='flex-col w-full m-10'>
-                <input
-                    className='w-full h-16 rounded-xl border-foreground text-white mb-5'
+                <Input className='w-full h-16 rounded-xl border-foreground text-white mb-5'
                     type="text"
                     placeholder='   Enter task title...'
                     value={newTask.title}
-                    onChange={(e) => handleInputChange(e, 'title')}
-                /> <br />
+                    onChange={(e) => handleInputChange(e, 'title')} />
+                <br />
                 <Textarea className='w-full h-16 rounded-xl border-foreground text-white mb-5'
                     placeholder='   Enter task content...'
                     value={newTask.content}
@@ -108,7 +128,7 @@ export default function ToDoList() {
                                 <Accordion type="single" collapsible>
                                     <AccordionItem value="item-1">
                                         <AccordionTrigger>{task.title}</AccordionTrigger>
-                                        <AccordionContent className="text-md whitespace-pre-line">
+                                        <AccordionContent className="text-lg whitespace-pre-line">
                                             {task.content}
                                         </AccordionContent>
                                     </AccordionItem>

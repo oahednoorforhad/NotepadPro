@@ -35,9 +35,15 @@ function Navbar() {
             <Button className="bg-secondary">Login</Button>
           </Link>
         ) : (
-          <Button className="bg-secondary" onClick={() => signOut()}>
-            Logout
-          </Button>
+          <Link href="/login">
+            <Button
+              className="bg-secondary"
+              href="/login"
+              onClick={() => signOut()}
+            >
+              Logout
+            </Button>
+          </Link>
         )}
       </div>
     </div>

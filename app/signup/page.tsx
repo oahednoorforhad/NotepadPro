@@ -61,15 +61,15 @@ export default function signUp() {
                                 </div>
                                 <div className="flex flex-col space-y-1.5">
                                     <Label htmlFor="email">Email</Label>
-                                    <Input id="email" placeholder="Enter your email" />
+                                    <Input type="email" id="email" placeholder="Enter your email" />
                                 </div>
                                 <div className="flex flex-col space-y-1.5">
                                     <Label htmlFor="username">Usermame</Label>
-                                    <Input id="username" placeholder="Enter your username" />
+                                    <Input type="username" id="username" placeholder="Enter your username" />
                                 </div>
                                 <div className="flex flex-col space-y-1.5">
                                     <Label htmlFor="password">Password</Label>
-                                    <Input id="password" placeholder="Enter your password" />
+                                    <Input type="password" id="password" placeholder="Enter your password" />
                                 </div>
                             </div>
                             <CardFooter className="flex justify-between mt-5">

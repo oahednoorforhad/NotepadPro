@@ -31,17 +31,6 @@ export default function LogIn() {
         if (resp.status === 200) {
             router.push('/')
         }
-        // const resp = await fetch("http://localhost:3000/signup/api", {
-        //     method: "POST",
-        //     body: JSON.stringify(newUser),
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     }
-        // })
-        // console.log(resp)
-        // if (resp.status === 201) {
-        //     event.target.reset()
-        // }
     }
     return (
         <div className='lg:flex lg:mt-32 lg:gap-10 place-items-center justify-center items-center border-none p-4 bg-background gap-5 mt-10'>
@@ -63,7 +52,7 @@ export default function LogIn() {
                                 </div>
                                 <div className="flex flex-col space-y-1.5">
                                     <Label htmlFor="password">Password</Label>
-                                    <Input id="password" placeholder="Enter your password" />
+                                    <Input type="password" id="password" placeholder="Enter your password" />
                                 </div>
                             </div>
                             <CardFooter className="flex justify-between mt-5">

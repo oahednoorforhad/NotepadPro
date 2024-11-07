@@ -33,3 +33,29 @@ export const GET = async (request) => {
         return new Response(JSON.stringify({ message: "Something went wrong", error: error.message }), { status: 500 });
     }
 };
+
+
+export const PUT = async (request) => {
+    try {
+        const { email, notes } = await request.json(); // Get email and notes from the request body
+
+        // Connect to the database
+        const db = await connectDB();
+        const userCollection = db.collection('users');
+
+        // Update the user's notes field based on the provided email
+        const result = await userCollection.updateOne(
+            { email },
+            { $set: { notes } }
+        );
+
+        if (result.modifiedCount === 0) {
+            return new Response(JSON.stringify({ message: "No update performed" }), { status: 404 });
+        }
+
+        return new Response(JSON.stringify({ message: "Notes updated successfully" }), { status: 200 });
+    } catch (error) {
+        console.error("Error updating notes:", error);
+        return new Response(JSON.stringify({ message: "Something went wrong", error: error.message }), { status: 500 });
+    }
+};
