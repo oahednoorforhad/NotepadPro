@@ -16,16 +16,21 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { signIn } from 'next-auth/react';
-export default function logIn() {
-
+import { useRouter } from 'next/navigation';
+export default function LogIn() {
+    const router = useRouter();
     const handleSignIn = async (event) => {
         event.preventDefault();
+
         const username = event?.target.username.value;
         const password = event?.target.password.value;
         const resp = await signIn('credentials', {
             username, password, redirect: false
         })
         console.log(resp);
+        if (resp.status === 200) {
+            router.push('/')
+        }
         // const resp = await fetch("http://localhost:3000/signup/api", {
         //     method: "POST",
         //     body: JSON.stringify(newUser),
@@ -37,7 +42,6 @@ export default function logIn() {
         // if (resp.status === 201) {
         //     event.target.reset()
         // }
-
     }
     return (
         <div className='lg:flex lg:mt-32 lg:gap-10 place-items-center justify-center items-center border-none p-4 bg-background gap-5 mt-10'>
@@ -48,7 +52,6 @@ export default function logIn() {
                 <Card className="w-[350px]">
                     <CardHeader>
                         <CardTitle>Log in to your account</CardTitle>
-
                         <CardDescription>Login here</CardDescription>
                     </CardHeader>
                     <CardContent>

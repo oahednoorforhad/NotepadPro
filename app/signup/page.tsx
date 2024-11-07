@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { POST } from './api/route';
 export default function signUp() {
 
     const handleSignUp = async (event) => {
@@ -25,7 +24,7 @@ export default function signUp() {
             email: event?.target.email.value,
             password: event?.target.password.value,
             username: event?.target.username.value,
-            notes: { title: "", content: "" }
+            notes: [{ title: "", content: "" }]
         };
         console.log(newUser);
         const resp = await fetch("http://localhost:3000/signup/api", {
